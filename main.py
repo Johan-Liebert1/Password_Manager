@@ -65,7 +65,7 @@ def what_to_do_next():
         possible_inputs = ['v', 'view', 'a', 'add', 'e', 'exit']
 
         if inp.lower() not in possible_inputs:
-            print(colored("Please enter a valid option!", red))
+            print(colored("Please enter a valid option!", 'red'))
             return
 
         elif inp.lower() in possible_inputs[0:2]:
@@ -82,7 +82,7 @@ def what_to_do_next():
         more = input("\nDo more stuff? (Y/N): ")
 
         if more.lower() != 'y':
-            print("Exiting...")
+            print("Exiting...\n")
             break
 
         else:
