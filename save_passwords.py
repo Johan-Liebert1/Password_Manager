@@ -3,9 +3,6 @@ import re
 from termcolor import colored
 
 
-connection = sqlite3.connect('database.sqlite3')
-cur = connection.cursor()
-
 def email_validator(mailaddress):
     pattern = r'^([a-zA-Z0-9\.\-_]+)@[a-zA-Z_\-]{2,}\.[a-z\-_]{2,}'
 
@@ -26,6 +23,10 @@ def isWebsiteUnique(site):
 
 
 def save_a_password():
+    global connection, cur
+    connection = sqlite3.connect('database.sqlite3')
+    cur = connection.cursor()
+
     website = ''
     email = ''
     username = ''
@@ -61,6 +62,7 @@ def save_a_password():
         if len(username) < 1 and len(email) < 1:
             print(colored("\nUsername and Email both cannot be empty", 'red'))
             print(colored("Record not saved!", 'red'))
+            cur.close()
             return
 
         if not isWebsiteUnique(website):
@@ -81,3 +83,5 @@ def save_a_password():
 
     else:
         print(colored("Passwords do not match! ", 'red'))
+
+    cur.close()

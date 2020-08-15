@@ -1,3 +1,4 @@
 *.sqlite3
 __pycache__
 things_to_do.py
+.vscode

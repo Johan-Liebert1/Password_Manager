@@ -3,6 +3,7 @@ import hashlib
 from termcolor import colored
 
 from save_passwords import save_a_password
+from get_passwords import retrieve_saved_passwords
 
 connection = sqlite3.connect('database.sqlite3')
 cur = connection.cursor()
@@ -31,6 +32,8 @@ def create_new_admin():
     else:
         print(colored('Passwords do not match', 'red'))
 
+    cur.close()
+
 
 def admin_login():
     print(colored("\nLOG IN\n", 'blue', attrs=['bold']))
@@ -52,6 +55,8 @@ def admin_login():
     else:
         print(colored(f"Admin with username = {admin_username} not found!", 'red'))
 
+    cur.close()
+
 
 
 def what_to_do_next():
@@ -69,8 +74,7 @@ def what_to_do_next():
             return
 
         elif inp.lower() in possible_inputs[0:2]:
-            # get_passwords()
-            print('Getting passwords')
+            retrieve_saved_passwords()
             
         elif inp.lower() in possible_inputs[2:4]:
             save_a_password()
@@ -82,7 +86,7 @@ def what_to_do_next():
         more = input("\nDo more stuff? (Y/N): ")
 
         if more.lower() != 'y':
-            print("Exiting...\n")
+            print(colored("Exiting...\n", "blue"))
             break
 
         else:
