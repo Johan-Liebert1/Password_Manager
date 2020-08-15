@@ -1,13 +1,15 @@
 import sqlite3
-from os import path
-from termcolor import colored
 import hashlib
+from termcolor import colored
 
-connection = sqlite3.connect('admin.sqlite3')
+from save_passwords import save_a_password
+
+connection = sqlite3.connect('database.sqlite3')
 cur = connection.cursor()
 
 
 def create_new_admin():
+    print(colored("\nCREATE NEW ADMIN\n", 'blue', attrs=['bold']))
     admin_username = input("Enter Username: ")
     admin_password = input("Enter Password: ")
     password_conf  = input("Enter Password (again): ")
@@ -16,18 +18,7 @@ def create_new_admin():
     if admin_password == password_conf:
         hashed_password = hashlib.sha256(admin_password.encode()).hexdigest()
 
-        cur.execute("""
-            DROP TABLE IF EXISTS Admin
-        """)
-
         # also need to add a salt field
-        cur.execute("""
-            CREATE TABLE Admin (
-                admin TEXT,
-                salt TEXT, 
-                password TEXT
-            );
-        """)
 
         cur.execute("""
             INSERT INTO Admin 
@@ -41,9 +32,31 @@ def create_new_admin():
         print(colored('Passwords do not match', 'red'))
 
 
-'''
+def admin_login():
+    print(colored("\nLOG IN\n", 'blue', attrs=['bold']))
+    admin_username = input("Enter Admin Username: ")
+
+    cur.execute("SELECT * FROM Admin WHERE admin = ?", (admin_username,))
+
+    row = cur.fetchone()
+
+    if row is not None:
+        hashed_password = row[2]
+        passwrd = input("Enter your Password: ")
+
+        if hashlib.sha256(passwrd.encode()).hexdigest() == hashed_password:
+            print(colored("Logged you in successfully! ", 'green'))
+
+            what_to_do_next()
+    
+    else:
+        print(colored(f"Admin with username = {admin_username} not found!", 'red'))
+
+
+
 def what_to_do_next():
     more = 'y'
+
     while True and more.lower() == 'y':
         inp = input("\n1. View Stored Passwords (v/V/view)" 
                     "\n2. Add new Passwords (a/A/add)" 
@@ -52,14 +65,15 @@ def what_to_do_next():
         possible_inputs = ['v', 'view', 'a', 'add', 'e', 'exit']
 
         if inp.lower() not in possible_inputs:
-            print("Please enter a valid option!")
+            print(colored("Please enter a valid option!", red))
             return
 
         elif inp.lower() in possible_inputs[0:2]:
-            get_passwords()
+            # get_passwords()
+            print('Getting passwords')
             
         elif inp.lower() in possible_inputs[2:4]:
-            save_passwords()
+            save_a_password()
 
         elif inp.lower() in possible_inputs[4:]:
             print("Exiting...")
@@ -73,9 +87,28 @@ def what_to_do_next():
 
         else:
             continue
-'''
+
+
+
+def main():
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS Admin (
+            admin TEXT UNIQUE,
+            salt TEXT, 
+            password TEXT
+        );
+    """) 
+
+    cur.execute("SELECT * FROM Admin")
+    row = cur.fetchone()
+
+    if row is not None:
+        admin_login()
+
+    else:
+        create_new_admin()
 
 if __name__ == "__main__":
-    create_new_admin()
+    main()
 
 
