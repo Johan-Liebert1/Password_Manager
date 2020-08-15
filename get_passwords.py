@@ -2,7 +2,11 @@ import sqlite3
 from termcolor import colored
 
 def find_all():
-    cur.execute("SELECT * FROM Passwords")
+    try:
+        cur.execute("SELECT * FROM Passwords")
+
+    except:
+        print(colored("There are no records to show", 'green'))
 
     all_rows = cur.fetchall()
 
@@ -12,10 +16,10 @@ def find_all():
         print(colored(f"\nENTRY {index + 1}", 'green'))
 
         print(f"""
-          website  : {row[0]}
-          email    : {row[1]}
-          username : {row[2]}
-          password : {row[3]}
+          website  : {row[1]}
+          email    : {row[2]}
+          username : {row[3]}
+          password : {row[4]}
         """)
 
 
@@ -27,20 +31,20 @@ def find_record(site):
     # row is a tuple
 
     print(f"""
-      website  : {row[0]}
-      email    : {row[1]}
-      username : {row[2]}
-      password : {row[3]}
+      website  : {row[1]}
+      email    : {row[2]}
+      username : {row[3]}
+      password : {row[4]}
     """)
 
 
 
-def retrieve_saved_passwords():
+def retrieve_saved_passwords(find_website = ''):
     global connection, cur
 
     connection = sqlite3.connect('database.sqlite3')
     cur = connection.cursor()
-
+    
     find_website = input("Enter the website (press enter to view all records): ")
 
     if len(find_website) < 1:

@@ -4,6 +4,7 @@ from termcolor import colored
 
 from save_passwords import save_a_password
 from get_passwords import retrieve_saved_passwords
+from update_passwords import update_a_password
 
 connection = sqlite3.connect('database.sqlite3')
 cur = connection.cursor()
@@ -65,9 +66,10 @@ def what_to_do_next():
     while True and more.lower() == 'y':
         inp = input("\n1. View Stored Passwords (v/V/view)" 
                     "\n2. Add new Passwords (a/A/add)" 
-                    "\n3. Exit (e/E/exit)\n")
+                    "\n3. Update a record (u/U/update)"
+                    "\n4. Exit (e/E/exit)\n")
 
-        possible_inputs = ['v', 'view', 'a', 'add', 'e', 'exit']
+        possible_inputs = ['v', 'view', 'a', 'add', 'e', 'exit', 'u', 'update']
 
         if inp.lower() not in possible_inputs:
             print(colored("Please enter a valid option!", 'red'))
@@ -79,9 +81,13 @@ def what_to_do_next():
         elif inp.lower() in possible_inputs[2:4]:
             save_a_password()
 
-        elif inp.lower() in possible_inputs[4:]:
+        elif inp.lower() in possible_inputs[4:6]:
             print("Exiting...")
             break
+
+        elif inp.lower() in possible_inputs[6:]:
+            w = input("Enter the website for which you wish to update records: ")
+            update_a_password(w)
 
         more = input("\nDo more stuff? (Y/N): ")
 

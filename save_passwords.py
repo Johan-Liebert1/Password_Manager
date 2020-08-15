@@ -1,25 +1,6 @@
 import sqlite3
-import re
 from termcolor import colored
-
-
-def email_validator(mailaddress):
-    pattern = r'^([a-zA-Z0-9\.\-_]+)@[a-zA-Z_\-]{2,}\.[a-z\-_]{2,}'
-
-    if re.search(pattern, mailaddress):
-        return True
-
-    return False
-
-
-def isWebsiteUnique(site):
-    cur.execute("SELECT * FROM Passwords WHERE website = ?", (site,))
-
-    if cur.fetchone() is None:
-        return True
-
-    else:
-        return False
+from helpers import email_validator, isWebsiteUnique
 
 
 def save_a_password():
@@ -50,14 +31,18 @@ def save_a_password():
     p_confirm = input("Confirm Password: ")
 
     if password == p_confirm:
+        # ADD AN AUTOINCREMENT PRIMARY KEY
+
         cur.execute("""
             CREATE TABLE IF NOT EXISTS Passwords (
-                website TEXT UNIQUE PRIMARY KEY NOT NULL, 
+                _id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT,
+                website TEXT UNIQUE NOT NULL, 
                 email TEXT, 
                 username TEXT, 
                 password TEXT NOT NULL
             )
         """)
+        connection.commit()
 
         if len(username) < 1 and len(email) < 1:
             print(colored("\nUsername and Email both cannot be empty", 'red'))
@@ -67,9 +52,15 @@ def save_a_password():
 
         if not isWebsiteUnique(website):
             print(colored("An entry with the current website name already exists!", 'red'))
-            print("Do you want to Update it? (Y/N)")
+            
+            update_or_not = input("Do you want to Update it's records? (Y/N)")
 
-            # CALL A FUNCTION TO UPDATE THE RECORD IF INPUT IS YES
+            # if update_or_not.lower() == 'y':
+            #     update_saved_passwords(website)
+
+            # else:
+            #     cur.close()
+            #     return
 
         else:
             cur.execute("""
