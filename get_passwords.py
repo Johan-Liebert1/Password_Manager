@@ -29,13 +29,16 @@ def find_record(site):
     row = cur.fetchone()
 
     # row is a tuple
+    if row is not None:
+        print(f"""
+        website  : {row[1]}
+        email    : {row[2]}
+        username : {row[3]}
+        password : {row[4]}
+        """)
 
-    print(f"""
-      website  : {row[1]}
-      email    : {row[2]}
-      username : {row[3]}
-      password : {row[4]}
-    """)
+    else:
+        print(colored(f"Records for {site} don't exist! ", 'red'))
 
 
 

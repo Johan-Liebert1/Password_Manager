@@ -27,6 +27,8 @@ def update_record(old_website, record):
 
     connection.commit()
 
+    print(colored("Updated Successfully", 'green'))
+
 
 def update_a_password(website):
     global connection, cur
@@ -38,7 +40,8 @@ def update_a_password(website):
     row = cur.fetchone()
 
     if row is not None:
-        print(colored("Please enter new values for the fields \nLeave blank to not update", 'blue'))
+        print(colored("Please enter new values for the fields" 
+                        "\nLeave blank to not update", 'blue'))
         
         new_website = input("Website: ")
 

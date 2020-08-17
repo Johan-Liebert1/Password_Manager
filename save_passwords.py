@@ -1,6 +1,7 @@
 import sqlite3
 from termcolor import colored
 from helpers import email_validator, isWebsiteUnique
+from update_passwords import update_a_password
 
 
 def save_a_password():
@@ -31,7 +32,6 @@ def save_a_password():
     p_confirm = input("Confirm Password: ")
 
     if password == p_confirm:
-        # ADD AN AUTOINCREMENT PRIMARY KEY
 
         cur.execute("""
             CREATE TABLE IF NOT EXISTS Passwords (
@@ -55,12 +55,12 @@ def save_a_password():
             
             update_or_not = input("Do you want to Update it's records? (Y/N)")
 
-            # if update_or_not.lower() == 'y':
-            #     update_saved_passwords(website)
+            if update_or_not.lower() == 'y':
+                update_a_password(website)
 
-            # else:
-            #     cur.close()
-            #     return
+            else:
+                cur.close()
+                return
 
         else:
             cur.execute("""
