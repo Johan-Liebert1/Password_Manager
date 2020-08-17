@@ -40,20 +40,21 @@ def update_a_password(website):
     row = cur.fetchone()
 
     if row is not None:
-        print(colored("Please enter new values for the fields" 
-                        "\nLeave blank to not update", 'blue'))
+        print(colored(f"Update records for {website} \n* Required", 'blue'))
+        print(colored("\nPlease enter new values for the fields" 
+                        "\nLeave blank to not update\n", 'blue'))
         
-        new_website = input("Website: ")
+        new_website = input("Website : ")
 
         if len(new_website) > 1:
             while not isWebsiteUnique(new_website):
                 print(colored("An entry with the current website name already exists!", 'red'))
-                new_website = input("Website: ")
+                new_website = input("Website : ")
 
 
-        new_username = input("Username: ")
+        new_username = input("Username : ")
 
-        new_email = input("Email: ")
+        new_email = input("Email : ")
 
         if len(new_email) >= 1:
             while not email_validator(new_email):
@@ -61,9 +62,9 @@ def update_a_password(website):
                 new_email = input("Enter Email: ")
 
 
-        new_password = input("Password: ")
+        new_password = input("Password* : ")
         
-        new_password_conf = input("Password (again): ")
+        new_password_conf = input("Password (again)* : ")
 
         if new_password == new_password_conf:
             update_record(website, [new_website, new_email, new_username, new_password])

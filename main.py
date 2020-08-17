@@ -86,16 +86,21 @@ def admin_login():
     cur.close()
 
 
+def inputs():
+    inp = input("\n1. View Stored Passwords (1/v/V/view)" 
+            "\n2. Add new Passwords (2/a/A/add)" 
+            "\n3. Update a record (3/u/U/update)"
+            "\n4. Create New Admin (4/ create)"
+            "\n5. Exit (5/e/E/exit)\n\n")
+
+    return inp
+
 
 def what_to_do_next():
     more = 'y'
 
     while True and more.lower() == 'y':
-        inp = input("\n1. View Stored Passwords (1/v/V/view)" 
-                    "\n2. Add new Passwords (2/a/A/add)" 
-                    "\n3. Update a record (3/u/U/update)"
-                    "\n4. Create New Admin (4/ create)"
-                    "\n5. Exit (5/e/E/exit)\n")
+        inp = inputs()
 
         possible_inputs = [
             'v', 'view', '1', 
@@ -105,18 +110,22 @@ def what_to_do_next():
             '5', 'e', 'exit', 
         ]
 
-        if inp.lower() not in possible_inputs:
-            print(colored("Please enter a valid option!", 'red'))
-            return
+        
+        while inp.lower() not in possible_inputs:
+            print(colored("\nPlease enter a valid option!\n", 'red'))
+            inp = inputs()
+            
 
-        elif inp.lower() in possible_inputs[0:3]:
+        if inp.lower() in possible_inputs[0:3]:
+            print(colored("\nYour saved records", "green"))
+            print_all_websites()
             retrieve_saved_passwords()
             
         elif inp.lower() in possible_inputs[3:6]:
             save_a_password()
 
         elif inp.lower() in possible_inputs[6:9]:
-            print(colored("Your saved records", "green"))
+            print(colored("\nYour saved records", "green"))
             print_all_websites()
             w = input("\nEnter the website for which you wish to update records: ")
             update_a_password(w)
@@ -150,6 +159,8 @@ def main():
     """) 
 
     connection.commit()
+
+    print(colored("YOU CAN SAVE YOUR EMAIL AND PASSWORDS THAT YOU USE FOR DIFFERENT WEBSITES\n",'green'))
 
     cur.execute("SELECT * FROM Admin")
 

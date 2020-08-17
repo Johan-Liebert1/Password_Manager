@@ -15,21 +15,39 @@ def save_a_password():
     password = ''
     p_confirm = ''
 
-    website = input("Website Name : ").lower()
+    print(colored("\n* Required", 'blue'))
 
+    website = input("Website Name* : ").lower()
 
-    email = input("Enter Email: ")
+    while len(website) < 1:
+        print(colored("Please enter a valid website", 'red'))
+        website = input("Website Name* : ").lower()
+
+    
+    if not isWebsiteUnique(website):
+        print(colored("An entry with the current website name already exists!", 'red'))
+        
+        update_or_not = input("Do you want to Update it's records? (Y/N) ")
+
+        if update_or_not.lower() == 'y':
+            update_a_password(website)
+
+        else:
+            cur.close()
+            return
+
+    email = input("Enter Email : ")
 
     if len(email) >= 1:
         while not email_validator(email):
             print(colored("\nThe email entered is invalid. Please enter a valid email.", 'red'))
-            email = input("Enter Email: ")
+            email = input("Enter Email : ")
 
-    username = input("Enter Username: ")
+    username = input("Enter Username : ")
 
-    password = input("Enter Password: ")
+    password = input("Enter Password* : ")
 
-    p_confirm = input("Confirm Password: ")
+    p_confirm = input("Confirm Password* : ")
 
     if password == p_confirm:
 
@@ -50,17 +68,6 @@ def save_a_password():
             cur.close()
             return
 
-        if not isWebsiteUnique(website):
-            print(colored("An entry with the current website name already exists!", 'red'))
-            
-            update_or_not = input("Do you want to Update it's records? (Y/N)")
-
-            if update_or_not.lower() == 'y':
-                update_a_password(website)
-
-            else:
-                cur.close()
-                return
 
         else:
             cur.execute("""

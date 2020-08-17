@@ -12,6 +12,8 @@ def find_all():
 
     # rows in an array of tuples of shape (website, email, username, password)
 
+    string = ''
+
     for index, row in enumerate(all_rows):
         print(colored(f"\nENTRY {index + 1}", 'green'))
 
@@ -21,6 +23,7 @@ def find_all():
           username : {row[3]}
           password : {row[4]}
         """)
+
 
 
 def find_record(site):

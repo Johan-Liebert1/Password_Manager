@@ -6,6 +6,8 @@ conn = sqlite3.connect('database.sqlite3')
 
 
 def email_validator(mailaddress):
+    # regular expression pattern 
+    
     pattern = r'^([a-zA-Z0-9\.\-_]+)@[a-zA-Z0-9_\-]{2,}\.[a-z\-_]{2,}'
 
     if re.search(pattern, mailaddress):
@@ -61,9 +63,10 @@ def print_all_websites():
     for index, row in enumerate(list_of_rows):
         # as only website name is being retrieved, row only has (website,)
 
-        print(f'{index + 1}. {row[0]}', end = '\t')
+        print("{}. {:25s}" .format(index + 1, row[0]), end="\t")
 
         if (index + 1) % 4 == 0:
             print('\n')
 
+    print("\n")
      
